@@ -1,135 +1,153 @@
 #include <iostream>
 using namespace std;
-//Creating class time having 2 value which contain time and compares and adds these two time;
+//Creating class time having constructors of 3 types and operator overloading on + - == < > ++
 class Time{
     int sec,min,hour;
 public:
+    Time()
+    {
+        sec = min = hour =0;
+    }
+    Time(int x,int y,int z)
+    {
+        sec = x;
+        min = y;
+        hour = z;
+    }
+    Time(Time &t)
+    {
+        sec = t.sec;
+        min = t.min;
+        hour = t.hour;
+    }
     void input();
     void show();
-    void compare(Time *a,Time *b);
-    Time add(Time *a, Time *b);
+    
+    Time operator +(Time j)
+    {
+        Time s;
+        s.sec = sec + j.sec;
+        s.min = min + j.min;
+        s.hour = hour+j.hour;
+        return s;
+    }
+    Time operator -(Time i)
+    {
+        Time s;
+        long int t1,t2;
+        t1 = (hour *60)*60 + min *60 + sec;
+        t2 = (i.hour *60)*60 + i.min *60 + i.sec;
+        
+       
+        if(t1>t2)
+        {
+            s.sec = t1 - t2;
+        }
+        else
+            s.sec = t2 - t1;
+
+        return s;
+    }
+    bool operator ==(const Time &o)
+    {
+        if(hour == o.hour && min == o.min && sec == o.sec)
+            return true;
+        else 
+            return false;
+    }
+    bool operator >(const Time &o)
+    {
+        if(hour > o.hour || min > o.min || sec > o.sec)
+            return true;
+        else 
+            return false;
+    }
+    bool operator <(const Time &o)
+    {
+        if(hour < o.hour || min < o.min || sec < o.sec)
+            return true;
+        else 
+            return false;
+    }
+    Time operator ++()
+    {   Time res;
+        
+        res.min = ++min;
+        res.sec = ++sec;
+        res.hour = ++hour;
+        res.show();
+        cout<<endl;
+    }
 };
 int main()
 {   
-    Time a,b;
-    cout<<"Enter the time :";
+    Time a,b,c,d(88,54,9);
+    cout<<"Enter the time :"<<endl;
     a.input();
     b.input();
+    Time e(a);
+    cout<<"Entered  Times are : "<<endl;
     a.show();
+    cout<<endl;
     b.show();
-    Time k;
-    k.add(&a,&b);
-    cout<<"Addition of two times are "<<endl;
-    k.show();
-    Time t;
-    t.compare(&a,&b);
-    cout<<"Greater time btw given time is:"<<endl;
+    cout<<endl;
+    cout<<"Example of Default Constructor"<<endl;
+    c.show();
+    cout<<endl;
+    cout<<"Example of Paramaterized Constructor "<<endl;
+    d.show();
+    cout<<endl;
+    cout<<"Example of Copy Constructor "<<endl;
+    e.show();
+    cout<<endl;
+    Time s,t;
+    s = a + b;
+    cout<<"Addition of  Times are : "<<endl;
+    s.show();
+    cout<<endl;
+    cout<<"Subtraction of Times are : "<<endl;
+    t = a - b ;
     t.show();
+    cout<<endl;
     
-    
-
+    if(a==b)
+    {
+        a.show();
+        cout<<" is Equals to b ";
+        b.show();
+        cout<<endl;
+    }  
+    else if(a>b)
+    {   a.show();
+        cout<<" is greater than b ";
+        b.show();
+        cout<<endl;
+    }
+    else
+    {
+        a.show();
+        cout<<" is smaller than b ";
+        b.show();
+        cout<<endl;
+    }
+    cout<<"Increament of 1 hr 1 min and 1 sec in a Time is "<<endl;
+    ++a;
+    ++b;
 }
 void Time::input()
 {   cout<<"Enter seconds ";
     cin>>sec;
-    if(sec<60)
-    {   
-        cout<<"Enter minutes :";
-        cin>>min;
-    }
-    else 
-    {   int t;
-        t = sec/60;
-        sec = sec -(t*60);
-        cout<<"Enter minutes ";
-        cin>>min;
-        min = min+t;
-    }
-    if (min<60)
-    {
-        cout<<"Enter hours ";
-        cin>>hour;
-    }
-    else    
-    {   int t;
-        t = min /60;
-        min = min - (t*60);
-        cout<<"Enter hours ";
-        cin>>hour;
-        hour = hour + t;
-    }
-
+    cout<<"Enter minutes";
+    cin>>min;
+    cout<<"Enter Hours ";
+    cin>>hour;
 }
 void Time::show()
-{
-    cout<<hour<<" hours "<<min<<" minutes "<<sec<<" seconds "<<endl;
-}
-Time Time::add(Time *a,Time *b)
-{
-    
-    hour=a->hour+b->hour;
-    min=a->min+b->min;
-    sec=a->sec+b->sec;
-    if(sec>60)
-    {   int t;
-        t = sec/60;
-        sec = sec -(t*60);
-        
-        min = min+t;
-    }
-    if (min>60)
-    {
-        int t;
-        t = min /60;
-        min = min - (t*60);
-        
-        hour = hour + t;
-    }
-   
-}
-void Time::compare(Time *a, Time *b )
-{      
-    if(a->hour<b->hour)
-    {
-        hour = b->hour;
-        min = b->min;
-        sec = b->sec;
-    }
-    else if(a->hour>b->hour)
-    {
-        hour = a->hour;
-        min = a->min;
-        sec = a->sec;
-    }
-    else
-    {   if(a->min<b->min)
-        {
-            hour = b->hour;
-            min = b->min;
-            sec = b->sec;
-        }
-        else if(a->min>b->min)
-        {
-            hour = a->hour;
-            min = a->min;
-            sec = a->sec;
-        }
-        else
-        {
-            if(a->sec<b->sec)
-            {
-                hour = b->hour;
-                min = b->min;
-                sec = b->sec;
-            }
-            else 
-            {
-                hour = a->hour;
-                min = a->min;
-                sec = a->sec;
-            }
-        }
-    }
-
-    
+{   int t = sec/60;
+    sec = sec%60;
+    min = min + t;
+    int k = min/60;
+    min = min % 60;
+    hour = hour + k;
+    cout<<hour<<" hours "<<min<<" minutes "<<sec<<"seconds ";
 }
